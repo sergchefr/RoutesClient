@@ -1,4 +1,8 @@
-package ru.ifmo.commands;
+package ru.ifmo.Commands.serverCommands;
+
+import ru.ifmo.Commands.VerifierCommand;
+import ru.ifmo.Commands.VerifierCommandBuilder;
+import ru.ifmo.Commands.ParameterBuilder;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

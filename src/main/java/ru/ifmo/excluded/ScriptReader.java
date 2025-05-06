@@ -1,6 +1,7 @@
-package ru.ifmo;
+package ru.ifmo.excluded;
 
-import ru.ifmo.commands.CommandManager;
+import ru.ifmo.Commands.serverCommands.ServerCommandManager;
+import ru.ifmo.ConsoleIO;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,11 +9,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ScriptReader {
-    CommandManager commandManager;
+    ServerCommandManager serverCommandManager;
     ConsoleIO console;
 
-    public ScriptReader(CommandManager commandManager, ConsoleIO console) {
-        this.commandManager = commandManager;
+    public ScriptReader(ServerCommandManager serverCommandManager, ConsoleIO console) {
+        this.serverCommandManager = serverCommandManager;
         this.console = console;
     }
 
@@ -31,16 +32,16 @@ public class ScriptReader {
         String[] commands = fileString.split("\n");
         for (String command : commands) {
             //System.out.println(command.split(" ")[0]);
-            System.out.println(commandManager.getCommand("info"));
-            var a = commandManager.getCommand(command.split(" ")[0].strip());
+            System.out.println(serverCommandManager.getVerifierCommand("info"));
+            var a = serverCommandManager.getVerifierCommand(command.split(" ")[0].strip());
             //System.out.println(a);
             if(a.verify(command)){
-                commandManager.execute(command.strip());
+                serverCommandManager.execute(command.strip());
             }else{
                 console.print("команда введена неверно: "+command);
             }
         }
-        System.out.println("чтение файла завершено");
+        console.print("чтение файла завершено");
     }
 
     private String readfile(String scriptLocation) throws IOException{

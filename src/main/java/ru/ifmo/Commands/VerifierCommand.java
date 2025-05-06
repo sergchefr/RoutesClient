@@ -1,4 +1,4 @@
-package ru.ifmo.commands;
+package ru.ifmo.Commands;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -26,20 +26,29 @@ public class VerifierCommand {
             return parameters.isEmpty();
         }
         //основная часть
-        int count1=0;
-        int count2=0;
-        for (String arg : Arrays.copyOfRange(com.split(" "),1,com.split(" ").length)) {
-            count2 =0;
-            for (String par : parameters.keySet()) {
-                if(parameters.get(par).verify(arg)){
-                    System.out.println(par+" verified");
-                    count2++;
-                }else System.out.println(par+" not verified");
-            }
-            if(count2==1) count1++;
-            count2=0;
+//        int count1=0;
+//        int count2=0;
+//        for (String arg : Arrays.copyOfRange(com.split(" "),1,com.split(" ").length)) {
+//            count2 =0;
+//            for (String par : parameters.keySet()) {
+//                if(parameters.get(par).verify(arg)){
+//                    //System.out.println(par+" verified");
+//                    count2++;
+//                }else {
+//                    //System.out.println(par+" not verified");
+//                }
+//            }
+//            if(count2==1) count1++;
+//            count2=0;
+//        }
+        //return count1==parameters.size();
+
+
+        CommandBuilder builder = new CommandBuilder(this);
+        for (String arg : Arrays.copyOfRange(com.split(" "),1,com.split(" ").length)){
+            builder.addParameter(arg);
         }
-        return count1==parameters.size();
+        return builder.isReady();
     }
 
     private String deleteExtraSpace(String a){

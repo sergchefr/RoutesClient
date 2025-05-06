@@ -1,8 +1,6 @@
-package ru.ifmo.commands;
+package ru.ifmo.Commands;
 
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 public class CommandBuilder {
     private VerifierCommand command;

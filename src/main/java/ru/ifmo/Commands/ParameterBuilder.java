@@ -1,4 +1,4 @@
-package ru.ifmo.commands;
+package ru.ifmo.Commands;
 
 public class ParameterBuilder {
     private String name="";

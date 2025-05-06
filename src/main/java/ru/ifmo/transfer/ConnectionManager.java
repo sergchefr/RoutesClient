@@ -1,31 +1,31 @@
-package ru.ifmo;
+package ru.ifmo.transfer;
 
-import ru.ifmo.transfer.Request;
-import ru.ifmo.transfer.Response;
+import ru.ifmo.Commands.serverCommands.NoConfigException;
+import ru.ifmo.ConsoleIO;
 
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-public class ConnectionManager {
+public class ConnectionManager implements IconnectionManager{
     private int port;
     private ConsoleIO console;
-
     public ConnectionManager(int port) {
         this.port = port;
     }
 
-    public String getConfig()throws NoConfigException{
-        var a =getResponse("GetConfigCommand");
-        //System.out.println(a.split("\n")[0]);
-        //System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-        //System.out.println(a.split("\n")[0].strip().equals("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"));
+    public String getConfig()throws NoConfigException {
+        var a =getResponse("load_config");
         if(a.split("\n")[0].strip().equals("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>")) return a;
         //console.print("ошибка получения конфига с сервера");
         throw new NoConfigException("ошибка получения конфига с сервера");
     }
 
+    @Override
+    public String[] getResponses() {// не работает
+        return new String[0];
+    }
 
     public void setConsole(ConsoleIO console) {
         this.console = console;
