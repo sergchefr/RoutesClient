@@ -5,16 +5,19 @@ public class ParameterBuilder {
     private String description="";
     private String limitations;
 
-    public void setName(String name) {
+    public ParameterBuilder setName(String name) {
         this.name = name;
+        return this;
     }
 
-    public void setDescription(String description) {
+    public ParameterBuilder setDescription(String description) {
         this.description = description;
+        return this;
     }
 
-    public void setLimitations(String limitations) {
+    public ParameterBuilder setLimitations(String limitations) {
         this.limitations = limitations;
+        return this;
     }
 
     public Parameter getParameter(){

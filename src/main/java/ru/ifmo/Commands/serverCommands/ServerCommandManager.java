@@ -24,35 +24,14 @@ public class ServerCommandManager {
     private boolean hasConfig;
     private String configFileName;
     private ArrayList<String> responses = new ArrayList<>();
+    private static ServerCommandManager instance;
 
-    public ServerCommandManager(ConnectionManager connectionManager, String configFileName, ConsoleIO console) {
-        this.console = console;
+    private ServerCommandManager(String configFileName) {
+        this.console = ConsoleIO.getInstance();
         this.configFileName = configFileName;
-        this.connectionManager=connectionManager;
+        this.connectionManager=ConnectionManager.getInstance();
         hasConfig=false;
-        XMLreader configreader = new XMLreader();
-
-
-        try {
-            String config = connectionManager.getConfig();
-            Path path = Paths.get(configFileName);
-            if(Files.exists(path)) Files.delete(path);
-            Files.createFile(path);
-            var fileString = Files.writeString(path,config);
-            //System.out.println(fileString);
-            //System.out.println(config);
-            console.print("конфиг с сервера загружен");
-            hasConfig=true;
-
-            VerifierCommand[] commands=  configreader.parceConfig(configFileName);
-            for (VerifierCommand command : commands) {
-                verifierCommandHashMap.put(command.getName(),command);
-            }
-        } catch (NoConfigException e) {
-            console.print(e.getMessage());
-        }catch (IOException ex){
-            console.print("ошибка сохранения конфига");
-        }
+        //loadConfig();
     }
 
     public String help(){
@@ -92,4 +71,36 @@ public class ServerCommandManager {
     public String[] getResponses() {
         return responses.toArray(new String[]{});
     }
+
+    public void loadConfig(){
+        XMLreader configreader = new XMLreader();
+        try {
+            String config = connectionManager.getConfig();
+            Path path = Paths.get(configFileName);
+            if(Files.exists(path)) Files.delete(path);
+            Files.createFile(path);
+            var fileString = Files.writeString(path,config);
+            //System.out.println(fileString);
+            //System.out.println(config);
+            console.print("конфиг с сервера загружен");
+            hasConfig=true;
+
+            VerifierCommand[] commands=  configreader.parceConfig(configFileName);
+            for (VerifierCommand command : commands) {
+                verifierCommandHashMap.put(command.getName(),command);
+            }
+        } catch (NoConfigException e) {
+            console.print(e.getMessage());
+        }catch (IOException ex){
+            console.print("ошибка сохранения конфига");
+        }
+    }
+
+    public static ServerCommandManager getInstance(){
+        if(instance==null){
+            instance = new ServerCommandManager("resources/config.xml");
+        }
+        return instance;
+    }
+
 }

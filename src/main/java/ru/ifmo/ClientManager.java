@@ -1,10 +1,7 @@
 package ru.ifmo;
 
 import ru.ifmo.Commands.CommandManagerImpl;
-import ru.ifmo.Commands.localCommands.ExecuteScriptCommand;
-import ru.ifmo.Commands.localCommands.ExitCommand;
-import ru.ifmo.Commands.localCommands.HelpCommand;
-import ru.ifmo.Commands.localCommands.LocalCommandManager;
+import ru.ifmo.Commands.localCommands.*;
 import ru.ifmo.Commands.serverCommands.ServerCommandManager;
 import ru.ifmo.Commands.serverCommands.XMLreader;
 import ru.ifmo.transfer.ConnectionManager;
@@ -17,10 +14,14 @@ public class ClientManager {
 
     public ClientManager() {
         configReader = new XMLreader();
-        connectionManager = new ConnectionManager(1111);
-        this.console = new ConsoleIO();
+
+        connectionManager = ConnectionManager.getInstance();
+        connectionManager.setPort(5317);
+
+        this.console = ConsoleIO.getInstance();
+        ServerCommandManager serverCommandManager = ServerCommandManager.getInstance();
         LocalCommandManager localCommandManager = new LocalCommandManager();
-        ServerCommandManager serverCommandManager = new ServerCommandManager(connectionManager,"resources/config.xml",console);
+        //ServerCommandManager serverCommandManager = new ServerCommandManager(connectionManager,"resources/config.xml",console);
         commandManager = new CommandManagerImpl(localCommandManager,serverCommandManager);
         console.setCommandManager(commandManager);
         connectionManager.setConsole(console);
@@ -28,6 +29,8 @@ public class ClientManager {
         localCommandManager.addCommand(new ExecuteScriptCommand(commandManager));
         localCommandManager.addCommand(new ExitCommand(console));
         localCommandManager.addCommand(new HelpCommand(commandManager));
+        localCommandManager.addCommand(new RegisterCommand());
+        localCommandManager.addCommand(new LoginCommand());
     }
     public void start(){
         console.start();

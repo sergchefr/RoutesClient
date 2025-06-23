@@ -14,7 +14,9 @@ public class ConsoleIO {
     private CommandManagerImpl commandManager;
     private Deque<String> resp;
 
-    public ConsoleIO() {
+    private static ConsoleIO instance;
+
+    private ConsoleIO() {
         console = new Scanner(System.in);
         resp = new LinkedList<>();
     }
@@ -181,4 +183,11 @@ public class ConsoleIO {
     public void setCommandManager(CommandManagerImpl CommandManager) {
         this.commandManager = CommandManager;
     }
+
+    public static ConsoleIO getInstance(){
+        if(instance==null){
+            instance=new ConsoleIO();
+        }
+        return instance;
+}
 }
